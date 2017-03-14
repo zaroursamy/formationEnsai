@@ -6,5 +6,10 @@ scalaVersion := "2.11.8"
 
 val scalaTestV = "2.2.6"
 
-libraryDependencies ++= Seq(  "org.scalatest" %% "scalatest" % scalaTestV % "test")
+val sparkV = "1.6.2"
+
+libraryDependencies ++= Seq(
+  "org.apache.spark" %% "spark-core" % sparkV,
+  "org.apache.spark" %% "spark-sql" % sparkV
+)
     
