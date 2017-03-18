@@ -32,8 +32,6 @@ val unBool: Boolean = {
   if (y >= 3) true else false
 }
 
-unBool
-
 /*
 * Exercice 1
 * Stocker dans une val la chaine "0/1/2/3/4" en l'initialisant à "0"
@@ -124,7 +122,6 @@ movie2.copy(id = 9).id
 trait Animal {
   // pas de parametre de constructeur
   def communicate: String
-
   val nbPattes: Option[Int] = None
 }
 
@@ -134,13 +131,11 @@ trait Mamifere extends Animal {
 
 class Cat extends Mamifere {
   override def communicate: String = "miaou"
-
   override val nbPattes: Option[Int] = Some(4)
 }
 
 class Dog extends Mamifere {
   override def communicate: String = "wouf"
-
   override val nbPattes: Option[Int] = Some(4)
 }
 
@@ -163,26 +158,32 @@ abstract class Person{
   val name: String
   val age: Int
   def accoucher: Boolean
+  def call (receiver: Person): Unit = println(this.name+ " appelle " + receiver.name)
 }
 
 case class Femme(name: String, age: Int) extends Person{
   override def accoucher: Boolean = true
-
   def faireLesBoutiques = "louboutin"
 }
+
 case class Homme(name: String, age: Int) extends Person{
   override def accoucher: Boolean = false
-
   def jouerJeuxVideos = "lol"
 }
 
-val samia: Person = Femme("samia", 22)
-val samia2: Femme = Femme("samia", 22)
-samia2.age
-samia2.faireLesBoutiques
+val samiaP: Person = Femme("samia", 22)
+val samiaF: Femme = Femme("samia", 22)
+samiaF.age
+samiaF.faireLesBoutiques
+val samy: Homme = Homme("samy", 24)
+samy call samiaF
+samy call samiaP
 
-val samiaVieille = samia2.copy(age = 89)
-samiaVieille.age
+object Pc extends Enumeration{
+  val apple = Value("Steve")
+  val microsoft = Value("Bill")
+}
+println(Pc.apple)
 
 import utils.Stat._
 
