@@ -3,7 +3,7 @@ package mapping
 import config.Settings
 import model.Movie
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{Row, SQLContext}
+import org.apache.spark.sql.{SQLContext}
 
 /**
   * Created by zarour on 15/03/2017.
@@ -11,7 +11,9 @@ import org.apache.spark.sql.{Row, SQLContext}
 object PrepareData {
 
   def readMovie(sQLContext: SQLContext): RDD[Movie] = {
-    sQLContext.read.format("com.databricks.spark.csv").option("header","true").load(Settings.pathMovieData).rdd.map(Movie.fromRow)
+
+    sQLContext.read.format("com.databricks.spark.csv").option("header","true").load(Settings.pathMovieData).printSchema()
+    sQLContext.read.format("com.databricks.spark.csv").option("header","true").load(Settings.pathMovieData).rdd.map(_.toString).map(Movie.fromString)//map(_.toString).map(Movie.fromString)
 
   }
 }

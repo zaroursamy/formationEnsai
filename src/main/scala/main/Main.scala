@@ -11,7 +11,6 @@ import org.apache.spark.{SparkConf, SparkContext}
 object Main {
 
 
-
   def main(args: Array[String]): Unit = {
 
     val sc = new SparkContext(new SparkConf().setMaster(Settings.master).setAppName(Settings.appName))
@@ -19,9 +18,9 @@ object Main {
 
     val movies: RDD[Movie] = PrepareData.readMovie(sQLContext)
 
-    movies.take(10).foreach(println)
+    movies.take(2).foreach(println)
 
-    movies.filter(_.directorName == "Doug Walker").collect().foreach(println)
+
 
   }
 
