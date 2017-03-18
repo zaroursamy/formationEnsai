@@ -2,8 +2,10 @@ import config.Settings
 import mapping.PrepareData
 import model.Movie
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{Row, SQLContext}
+import org.apache.spark.sql.SQLContext
 import org.apache.spark.{SparkConf, SparkContext}
+import utils.Stat._
+
 
 /**
   * Created by zarour on 13/03/2017.
