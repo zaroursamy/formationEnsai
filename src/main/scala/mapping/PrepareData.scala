@@ -14,15 +14,4 @@ object PrepareData {
   def readMovie(sQLContext: SQLContext): RDD[Movie] = {
     sQLContext.read.format("com.databricks.spark.csv").option("header","true").load(Settings.pathMovieData).rdd.flatMap(Movie.fromRow)
   }
-
-
-//  def readMovie(sQLContext: SQLContext) = {
-//    import sQLContext.implicits._
-//    sQLContext.
-//      read.
-//      format("com.databricks.spark.csv")
-//      .option("header","true")
-//      .load(Settings.pathMovieData)
-//      .as[Movie]
-//  }
 }

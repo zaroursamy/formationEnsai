@@ -2,7 +2,7 @@ import config.Settings
 import mapping.PrepareData
 import model.Movie
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{Dataset, SQLContext}
+import org.apache.spark.sql.SQLContext
 import org.apache.spark.{SparkConf, SparkContext}
 import utils.Stat._
 
@@ -20,18 +20,12 @@ object Main {
 
     val movies: RDD[Movie] = PrepareData.readMovie(sQLContext)
 
-    movies.foreach(println)
+    //movies.foreach(println)
 
-    println("Moyenne duration noir et blanc")
-    println(movies
-      .filter(_.color.contains("Black and White"))
-      .map(_.duration)
-      .filter(_.isDefined)
-      .map(_.get)
-      .mean())
-    println
+    println(s"Nombre de lignes: ${movies.count()}")
+    println(s"Nombre de lignes distinctes: ${movies.distinct().count()}")
 
-    println("Moyenne duration par groupe de couleur")
+    println("Durée moyenne du film par groupe de couleur")
     movies.filter(_.duration.isDefined).groupBy(_.color).map(m => (m._1, m._2.map(_.duration.get).toList.mean)).foreach(println)
 
 //    println("Nombre de lignes")
