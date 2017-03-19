@@ -20,7 +20,7 @@ object Main {
 
     val movies: RDD[Movie] = PrepareData.readMovie(sQLContext)
 
-//    movies.foreach(println)
+    movies.foreach(println)
 
     println("Moyenne duration noir et blanc")
     println(movies
