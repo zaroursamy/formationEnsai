@@ -7,15 +7,15 @@ package utils
 object Stat {
 
   trait SeqStat[T <: AnyVal]{
-    def mean: Double
+    def mean: Option[Double]
   }
 
   implicit class SeqStatDouble(s: Seq[Double]) extends SeqStat[Double]{
-    def mean: Double = s.sum / s.size
+    def mean: Option[Double] = if(s.nonEmpty) Some(s.sum / s.size) else None
   }
 
    implicit class SeqStatInt(s: Seq[Int]) extends SeqStat[Int]{
-    def mean: Double = s.sum / s.size
+    def mean: Option[Double] = if(s.nonEmpty) Some(s.sum / s.size) else None
   }
 
 }
