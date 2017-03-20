@@ -64,7 +64,7 @@ object Movie {
         if (r.getAs[String]("budget").isEmpty) None else Some(r.getAs[String]("budget").replaceAll(",", ".").toInt),
         if (r.getAs[String]("title_year").isEmpty) None else Some(r.getAs[Int]("title_year")),
         if (r.getAs[String]("actor_2_facebook_likes").isEmpty) None else Some(r.getAs[Int]("actor_2_facebook_likes")),
-        if (r.getAs[String]("imdb_score").isEmpty) None else Some(r.getAs[Double]("imdb_score")),
+        if (r.getAs[String]("imdb_score").isEmpty) None else Some(r.getAs[String]("imdb_score").replaceAll(",", ".").toDouble),
         if (r.getAs[String]("aspect_ratio").isEmpty) None else Some(r.getAs[Double]("aspect_ratio")),
         if (r.getAs[String]("movie_facebook_likes").isEmpty) None else Some(r.getAs[Int]("movie_facebook_likes"))
       )

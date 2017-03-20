@@ -97,7 +97,7 @@ mirrorList(list1)
 mirrorList(list2)
 mirrorList(list2, true)
 /*
-* Exemple 4: les classes
+* Exemple 4: les classes (exercice cf utils)
 */
 
 class Movie1(val title: String, id: Long = 0) {
@@ -185,8 +185,44 @@ object Pc extends Enumeration{
 }
 println(Pc.apple)
 
-import utils.Stat._
+/* Pattern matching */
+def pm1(x: Any) = x match {
+  case s: String => x
+  case i: Int => i
+  case _ => "autre"
+}
 
+def pm2(liste: List[Int], a: Int) = liste match {
+  case Nil => liste
+  case List(0, _) => 0
+  case List(a, _*) => a
+  case t::ts => t
+}
+
+println(pm2(List(0,2), 8))
+println(pm2(List(8,0), 8))
+
+
+
+/*
+Exerice 4: Ecrire la simplification des opérations de base sur R
+ */
+
+sealed abstract class Expr
+case class Var(name: String) extends Expr
+case class Number(num: Double) extends Expr
+case class UnOp(operator: String, arg: Expr) extends Expr
+case class BinOp(operator: String, left: Expr, right: Expr) extends Expr
+def simplifyNeutre(expr: Expr) = expr match {
+  case UnOp("-", UnOp("-", e)) => e // match ttes les valeurs de type UnOp ayant pr premier param "-" et pr second param  ttes les valeurs de type UnOp(...).."-" et e
+  case BinOp("+", Number(0), e) => e //* tous les arguments du constructeur sont des patterns
+  case BinOp("-", Number(0), e) => e
+  case BinOp("*", Number(1), e) => e
+  case _ => expr
+}
+
+
+import utils.Stat._
 val seqStatInt: List[Int] = List(10, 20)
 seqStatInt.mean
 
