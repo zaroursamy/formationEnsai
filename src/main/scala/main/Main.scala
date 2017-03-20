@@ -40,46 +40,52 @@ object Main {
       println("petalLength moyenne")
       println(okLines.map(_.petalLength).mean())
       println("moyenne des petalle length avec reduce")
-      println(okLines.map(_.petalLength).reduce(_+_)/okLines.count())
+      println(okLines.map(_.petalLength).reduce(_ + _) / okLines.count())
 
 
       println("nb de lignes au dessus de la moyenne petalLength")
       var moyenne = okLines.map(_.petalLength).mean()
-      println(okLines.map(_.petalLength).filter(_>moyenne).count())
+      println(okLines.map(_.petalLength).filter(_ > moyenne).count())
 
       println("nb de lignes au dessus de la moyenne sepalLength")
       moyenne = okLines.map(_.sepalLength).mean()
-      println(okLines.map(_.sepalLength).filter(_>moyenne).count())
+      println(okLines.map(_.sepalLength).filter(_ > moyenne).count())
     }
 
-   // exoIris(iris)
+    // exoIris(iris)
     def exoMovies(movies: RDD[Movie]) = {
 
-//      println("Moyenne budget " + movies.map(_.budget).filter(_.isDefined).map(_.get).mean)
-//      println("Moyenne budget noir et blanc " + movies.filter(_.color.contains("Black and White")).map(_.budget).filter(_.isDefined).map(_.get).mean)
-//      println("Moyenne budget couleur "+movies.filter(_.color.contains("Color")).map(_.budget).filter(_.isDefined).foreach(println))
-//
-//      println("\nCombien d'occurences par couleur de film")
-//      println(movies.map(_.color).countByValue())
-//
-//
-//      println(s"\nNombre de lignes: ${movies.count()}")
-//      println(s"\nNombre de lignes distinctes: ${movies.distinct().count()}")
-//      println("Moyenne budget France " + movies.filter(_.country.contains("France")).map(_.budget).filter(_.isDefined).map(_.get).mean)
-//      println("Moyenne budget Mexico " + movies.filter(_.country.contains("Mexico")).map(_.budget).filter(_.isDefined).map(_.get).mean)
-//      println("Moyenne budget China " + movies.filter(_.country.contains("China")).map(_.budget).filter(_.isDefined).map(_.get).mean)
-//      println("Moyenne budget USA " + movies.filter(_.country.contains("USA")).map(_.budget).filter(_.isDefined).map(_.get).mean)
-//
-//      println("\nFilms de George Lucas")
-//      movies.filter(_.directorName == "George Lucas").map(_.movieTitle).foreach(println)
+      println("Moyenne budget " + movies.map(_.budget).filter(_.isDefined).map(_.get).mean)
+      println("Moyenne budget noir et blanc " + movies.filter(_.color.contains("Black and White")).map(_.budget).filter(_.isDefined).map(_.get).mean)
+      println("Moyenne budget couleur " + movies.filter(_.color.contains("Color")).map(_.budget).filter(_.isDefined).map(_.get).mean)
+
+      println("\nCombien d'occurences par couleur de film")
+      println(movies.map(_.color).countByValue())
+
+
+      println(s"\nNombre de lignes: ${movies.count()}")
+      println(s"\nNombre de lignes distinctes: ${movies.distinct().count()}")
+      println("Moyenne budget France " + movies.filter(_.country.contains("France")).map(_.budget).filter(_.isDefined).map(_.get).mean)
+      println("Moyenne budget Mexico " + movies.filter(_.country.contains("Mexico")).map(_.budget).filter(_.isDefined).map(_.get).mean)
+      println("Moyenne budget China " + movies.filter(_.country.contains("China")).map(_.budget).filter(_.isDefined).map(_.get).mean)
+      println("Moyenne budget USA " + movies.filter(_.country.contains("USA")).map(_.budget).filter(_.isDefined).map(_.get).mean)
+
+      println("\nFilms de George Lucas")
+      movies.filter(_.directorName == "George Lucas").map(_.movieTitle).foreach(println)
 
       println("\n Parmis les films de George Lucas, lequel a le plus gros imdb_score ?")
       println(movies
         .filter(_.directorName == "George Lucas")
         .map(m => (m.movieTitle.getOrElse(""), m.imdbScore))
-        .reduce((x, y) => if(x._2.get > y._2.get) x else y))
+        .reduce((x, y) => if (x._2.get > y._2.get) x else y))
 
-      println("")
+      println("\nListe des films d'action")
+      movies.flatMap { m =>
+        val title = m.movieTitle
+        val keywords = m.plotKeywords.map(k => k.split("|")).getOrElse(Array())
+
+        if (keywords contains "Adventure") title else None
+      }.foreach(println)
 
 
     }
