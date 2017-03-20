@@ -105,6 +105,7 @@ mirrorList(list1)
 mirrorList(list2)
 mirrorList(list2, true)
 println(reversePerso(list2))
+
 /*
 * Exemple 4: les classes (exercice cf utils)
 */
@@ -215,9 +216,9 @@ def pm2(liste: List[Int], a: Int) = liste match {
 
 def max(l: List[Int]): Int = l match {
   case Nil => 0
-  case x::Nil => x
-  case x::y::ll if x > y => max(x::ll)
-  case x::y::ll if y > x => max(y::ll)
+  case t::Nil => t
+  case t::s::ll if t > s => max(t::ll)
+  case t::s::ll if s > t => max(s::ll)
 }
 
 println("max liste 1,10,4 " + max(List(1,10,4)))
