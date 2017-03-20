@@ -90,12 +90,21 @@ def mirrorList(list: List[Int], pair: Boolean = false): List[Int] = {
   }
 }
 
+/* Fonction reverse */
+def reversePerso(l: List[Int]): List[Int] = {
+  l match {
+    case Nil => Nil
+    case t::ts => reversePerso(ts) ::: List(t)
+  }
+}
+
 val list1 = List(4,3,2,3,4)
 val list2 = List(1,3,5)
 
 mirrorList(list1)
 mirrorList(list2)
 mirrorList(list2, true)
+println(reversePerso(list2))
 /*
 * Exemple 4: les classes (exercice cf utils)
 */
@@ -153,6 +162,11 @@ val dog = new Dog
 dog.nbPattes
 dog.communicate
 
+/* Exercice */
+import utils.Stat._
+val seqStatInt: List[Int] = List(10, 20)
+seqStatInt.mean
+
 /* Les classes abstraites */
 abstract class Person{
   val name: String
@@ -199,15 +213,19 @@ def pm2(liste: List[Int], a: Int) = liste match {
   case t::ts => t
 }
 
-println(pm2(List(0,2), 8))
-println(pm2(List(8,0), 8))
+def max(l: List[Int]): Int = l match {
+  case Nil => 0
+  case x::Nil => x
+  case x::y::ll if x > y => max(x::ll)
+  case x::y::ll if y > x => max(y::ll)
+}
 
+println("max liste 1,10,4 " + max(List(1,10,4)))
 
 
 /*
 Exerice 4: Ecrire la simplification des opérations de base sur R
  */
-
 sealed abstract class Expr
 case class Var(name: String) extends Expr
 case class Number(num: Double) extends Expr
@@ -220,11 +238,6 @@ def simplifyNeutre(expr: Expr) = expr match {
   case BinOp("*", Number(1), e) => e
   case _ => expr
 }
-
-
-import utils.Stat._
-val seqStatInt: List[Int] = List(10, 20)
-seqStatInt.mean
 
 
 

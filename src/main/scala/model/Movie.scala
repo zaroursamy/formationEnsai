@@ -78,26 +78,26 @@ object Movie {
 
 case class Iris(id: String, sepalLength: Double, sepalWidth: Double, petalLength: Double, petalWidth: Double, species: String)
 
-  object Iris {
-    def splitLine(line: String): Array[String] = line.split(",")
+object Iris {
+  def splitLine(line: String): Array[String] = line.split(",")
 
-    def irisObject(colonnes: Array[String]): Option[Iris] = {
+  def irisObject(colonnes: Array[String]): Option[Iris] = {
 
-      if (colonnes(0).replaceAll("\"", "").isEmpty) None
-      else {
-        Some(
-          Iris(
-            id = colonnes(0).replaceAll("\"", ""),
-            sepalLength = colonnes(1).toDouble,
-            sepalWidth = colonnes(2).toDouble,
-            petalLength = colonnes(3).toDouble,
-            petalWidth = colonnes(4).toDouble,
-            species = colonnes(5).replaceAll("\"", "")
-          )
+    if (colonnes(0).replaceAll("\"", "").isEmpty) None
+    else {
+      Some(
+        Iris(
+          id = colonnes(0).replaceAll("\"", ""),
+          sepalLength = colonnes(1).toDouble,
+          sepalWidth = colonnes(2).toDouble,
+          petalLength = colonnes(3).toDouble,
+          petalWidth = colonnes(4).toDouble,
+          species = colonnes(5).replaceAll("\"", "")
         )
-      }
-
+      )
     }
+
   }
+}
 
 
