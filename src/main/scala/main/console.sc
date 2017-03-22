@@ -299,8 +299,39 @@ def composerNom(p: Person, s: String = "X") = p match { // attention a l'ordre
 
 }
 
+/* Currying */
+def composerNom2(s: String = "X")(p: Person) = p match { // attention a l'ordre
+
+  case p: Person if isJohn(p) => p.name
+  case Homme(n, _) => s+n
+  case Femme(n, _) => n+s
+
+}
+
 composerNom(john)
 composerNom(samy)
 composerNom(samiaF)
 composerNom(samiaP)
+
+def composerNom2Curry(): (Person) => String = composerNom2("X")_
+
+def isFemmeNotJohn(f: (Person) => String, p:Person): Boolean = {
+  if(f(p).endsWith("X")) true else false
+}
+
+isFemmeNotJohn(composerNom2Curry(), samiaF)
+isFemmeNotJohn(composerNom2Curry(), john)
+
+/* Les collections */
+val listePersonnes: List[Person] = List(john, samiaF, samiaP, samy)
+
+def voirPersonnes(l: List[Person]): List[String] = {
+
+  def transformPersonne(p: Person): String = p.name+ " a " + p.age + " ans."
+
+  l.map(transformPersonne)
+}
+
+voirPersonnes(listePersonnes)
+
 
