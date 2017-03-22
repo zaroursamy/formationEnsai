@@ -34,12 +34,12 @@ val unBool: Boolean = {
 
 /*
 * Exercice 1
-* Stocker dans une val la chaine "0/1/2/3/4" en l'initialisant à "0"
+* Stocker dans une val l'alphabet séparé de - en l'initialisant à "0"
 */
 val exo1 = {
-  var i = "0"
-  val sep = "/"
-  for (j <- 1 to 4) i = i + sep + j
+  var i = ""
+  val sep = "-"
+  for (j <- 'a' to 'z') i = i + sep + j
   i
 }
 
@@ -49,6 +49,13 @@ Exemple 2: les fonctions
 
 def addS(s: String): String = s + "s"
 val pluriel = addS("ensaien")
+
+def fSide() {
+  "ok"
+}
+def fNoSide() = {
+  "ok"
+}
 
 def lancerUnMissile = println("BOOOOM")
 
@@ -85,7 +92,7 @@ val fact4 = factorielle(4)
 def mirrorList(list: List[Int], pair: Boolean = false): List[Int] = {
   if (list.reverse == list) list
   else {
-    if(pair)list.sortWith(_ > _) ::: list.sortWith(_ < _)
+    if (pair) list.sortWith(_ > _) ::: list.sortWith(_ < _)
     else list.sortWith(_ > _) ::: list.sortWith(_ < _).tail
   }
 }
@@ -94,12 +101,12 @@ def mirrorList(list: List[Int], pair: Boolean = false): List[Int] = {
 def reversePerso(l: List[Int]): List[Int] = {
   l match {
     case Nil => Nil
-    case t::ts => reversePerso(ts) ::: List(t)
+    case t :: ts => reversePerso(ts) ::: List(t)
   }
 }
 
-val list1 = List(4,3,2,3,4)
-val list2 = List(1,3,5)
+val list1 = List(4, 3, 2, 3, 4)
+val list2 = List(1, 3, 5)
 
 mirrorList(list1)
 mirrorList(list2)
@@ -113,7 +120,7 @@ println(reversePerso(list2))
 class Movie1(val title: String, id: Long = 0) {
 
   // constructeur
-  def this(id: Long) = this("shrek "+id, id)
+  def this(id: Long) = this("shrek " + id, id)
 }
 
 case class Movie2(title: String, id: Long = 0)
@@ -132,6 +139,7 @@ movie2.copy(id = 9).id
 trait Animal {
   // pas de parametre de constructeur
   def communicate: String
+
   val nbPattes: Option[Int] = None
 }
 
@@ -141,16 +149,19 @@ trait Mamifere extends Animal {
 
 class Cat extends Mamifere {
   override def communicate: String = "miaou"
+
   override val nbPattes: Option[Int] = Some(4)
 }
 
 class Dog extends Mamifere {
   override def communicate: String = "wouf"
+
   override val nbPattes: Option[Int] = Some(4)
 }
 
 class Baleine extends Mamifere {
   override def communicate = "mmmmmmmmm"
+
   override val nbPattes: Option[Int] = None
 }
 
@@ -164,27 +175,36 @@ dog.nbPattes
 dog.communicate
 
 /* Exercice */
+
 import utils.Stat._
+
 val seqStatInt: List[Int] = List(10, 20)
 seqStatInt.mean
 
 /* Les classes abstraites */
-abstract class Person{
+abstract class Person {
   val name: String
   val age: Int
+
   def accoucher: Boolean
-  def call (receiver: Person): Unit = println(this.name+ " appelle " + receiver.name)
+
+  def call(receiver: Person): Unit = println(this.name + " appelle " + receiver.name)
 }
 
-case class Femme(name: String, age: Int) extends Person{
+case class Femme(name: String, age: Int) extends Person {
   override def accoucher: Boolean = true
-  def faireLesBoutiques = "louboutin"
+
+  def faireLesBoutiques = name + " achète des louboutins"
 }
 
-case class Homme(name: String, age: Int) extends Person{
+case class Homme(name: String, age: Int) extends Person {
   override def accoucher: Boolean = false
-  def jouerJeuxVideos = "lol"
+
+  def jouerJeuxVideos = name + " joue à lol"
 }
+
+case class HommeFemme(name: String, age: Int)
+
 
 val samiaP: Person = Femme("samia", 22)
 val samiaF: Femme = Femme("samia", 22)
@@ -194,10 +214,11 @@ val samy: Homme = Homme("samy", 24)
 samy call samiaF
 samy call samiaP
 
-object Pc extends Enumeration{
+object Pc extends Enumeration {
   val apple = Value("Steve")
   val microsoft = Value("Bill")
 }
+
 println(Pc.apple)
 
 /* Pattern matching */
@@ -211,27 +232,32 @@ def pm2(liste: List[Int], a: Int) = liste match {
   case Nil => liste
   case List(0, _) => 0
   case List(a, _*) => a
-  case t::ts => t
+  case t :: ts => t
 }
 
 def max(l: List[Int]): Int = l match {
   case Nil => 0
-  case t::Nil => t
-  case t::s::ll if t > s => max(t::ll)
-  case t::s::ll if s > t => max(s::ll)
+  case t :: Nil => t
+  case t :: s :: ll if t > s => max(t :: ll)
+  case t :: s :: ll if s > t => max(s :: ll)
 }
 
-println("max liste 1,10,4 " + max(List(1,10,4)))
+println("max liste 1,10,4 " + max(List(1, 10, 4)))
 
 
 /*
 Exerice 4: Ecrire la simplification des opérations de base sur R
  */
 sealed abstract class Expr
+
 case class Var(name: String) extends Expr
+
 case class Number(num: Double) extends Expr
+
 case class UnOp(operator: String, arg: Expr) extends Expr
+
 case class BinOp(operator: String, left: Expr, right: Expr) extends Expr
+
 def simplifyNeutre(expr: Expr) = expr match {
   case UnOp("-", UnOp("-", e)) => e // match ttes les valeurs de type UnOp ayant pr premier param "-" et pr second param  ttes les valeurs de type UnOp(...).."-" et e
   case BinOp("+", Number(0), e) => e //* tous les arguments du constructeur sont des patterns
@@ -240,6 +266,41 @@ def simplifyNeutre(expr: Expr) = expr match {
   case _ => expr
 }
 
+def describe(e: Expr): String = e match {
+  case Number(_) => "a number"
+  case Var(_)    => "a variable"
+  case _ => "not a number, not a variable"
+}
 
 
+/* Les fonctions de premier ordre */
+def isJohn(p: Person) = p.name == "John"
+def isJohn2 = new Function[Person, Boolean] {
+  def apply(p: Person): Boolean = p.name == "John"
+}
+def isJohn3: (Person) => Boolean = (p: Person) => p.name == "John"
+
+val john = Homme("John", 20)
+isJohn(john)
+isJohn2(john)
+isJohn3(john)
+
+println(List(john, samiaF, samy, samiaP).filter(isJohn2))
+
+/* Ecrire une fonction qui prend une personne et un string, renvoie son prénom ajouté du string
+ * au début si c un homme et a la fin si c une femme
+ * Si c'est John alors elle renvoie son name
+ * */
+def composerNom(p: Person, s: String = "X") = p match { // attention a l'ordre
+
+  case p: Person if isJohn(p) => p.name
+  case Homme(n, _) => s+n
+  case Femme(n, _) => n+s
+
+}
+
+composerNom(john)
+composerNom(samy)
+composerNom(samiaF)
+composerNom(samiaP)
 
