@@ -51,7 +51,7 @@ object Movie {
         if (r.getAs[String]("genres").isEmpty) None else Some(r.getAs[String]("genres".trim)),
         if (r.getAs[String]("actor_1_name").isEmpty) None else Some(r.getAs[String]("actor_1_name").trim),
         if (r.getAs[String]("movie_title").isEmpty) None else Some(r.getAs[String]("movie_title").trim),
-        if (r.getAs[String]("num_voted_users").isEmpty) None else Some(r.getAs[Int]("num_voted_users")),
+        if (r.getAs[String]("num_voted_users").isEmpty) None else Some(r.getAs[String]("num_voted_users").replaceAll(",",".").toInt),
         if (r.getAs[String]("cast_total_facebook_likes").isEmpty) None else Some(r.getAs[Int]("cast_total_facebook_likes")),
         if (r.getAs[String]("actor_3_name").isEmpty) None else Some(r.getAs[String]("actor_3_name").trim),
         if (r.getAs[String]("facenumber_in_poster").isEmpty) None else Some(r.getAs[Int]("facenumber_in_poster")),
@@ -99,5 +99,9 @@ object Iris {
 
   }
 }
+
+case class Species(species: String, typeSpecies: String)
+
+
 
 
