@@ -5,10 +5,13 @@ package config
   */
 object Settings {
 
-  val pathMovieData = "src/main/resources/movie_metadata.csv"
   val pathIris = "src/main/resources/iris.csv"
   val pathSpecies = "src/main/resources/speciesIris.csv"
   val master = "local[*]"
-  val appName = "Movie"
+  val appName = "ensai"
+
+
+  val pathMovieData = "src/main/resources/movie_metadata.csv"
+
 
 }

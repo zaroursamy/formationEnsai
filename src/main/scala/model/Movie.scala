@@ -78,7 +78,41 @@ object Movie {
 
 case class Iris(id: String, sepalLength: Double, sepalWidth: Double, petalLength: Double, petalWidth: Double, species: String)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 object Iris {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   def splitLine(line: String): Array[String] = line.split(",")
 
   def irisObject(colonnes: Array[String]): Option[Iris] = {

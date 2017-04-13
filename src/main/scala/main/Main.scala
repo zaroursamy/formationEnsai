@@ -2,11 +2,14 @@ import config.Settings
 import mapping.PrepareData
 import model.{Iris, Movie}
 import org.apache.spark.broadcast.Broadcast
+import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.{SparkConf, SparkContext}
-import statistic.Classification
+import statistic.{Classification, Plot, Regression}
 import utils.Stat._
+
+import scala.reflect.internal.ClassfileConstants
 
 
 /**
@@ -18,46 +21,66 @@ object Main {
   def main(args: Array[String]): Unit = {
 
     val sc = new SparkContext(new SparkConf().setMaster(Settings.master).setAppName(Settings.appName))
+
+    val iris: RDD[Iris] = PrepareData.readIris(sc)
+
     val sQLContext = new SQLContext(sc)
 
-
-    val iris: RDD[Iris] = PrepareData.readIris(sc).cache
     val typeSpecies: Broadcast[Map[String, String]] = sc.broadcast(PrepareData.readSpecies(sc))
-
     val irisNew: RDD[Iris] = PrepareData.joinIrisSpecies(iris, typeSpecies)
-    val movies: RDD[Movie] = PrepareData.readMovie(sQLContext).cache
+
+    //    val movies: RDD[Movie] = PrepareData.readMovie(sQLContext).cache
 
 
     def exoIris(okLines: RDD[Iris]) = {
-//      println("nombre de replicas")
-//      println(okLines.count - okLines.distinct().count)
-//
-//      println("nb despece")
-//      println(okLines.map(_.species).distinct().count)
-//
-//      println("nb d'occurence de chaque espece")
-//      print(okLines.map(_.species).countByValue())
-//
-//      println("nb virginica")
-//      println(okLines.filter(_.species == "virginica").count)
-//
-//      println("petalLength moyenne")
-//      println(okLines.map(_.petalLength).mean())
-//      println("moyenne des petalLength avec reduce")
-//      println(okLines.map(_.petalLength).reduce(_ + _) / okLines.count())
-//
-//
-//      println("nb de lignes au dessus de la moyenne petalLength")
-//      var moyenne = okLines.map(_.petalLength).mean()
-//      println(okLines.map(_.petalLength).filter(_ > moyenne).count())
-//
-//      println("nb de lignes au dessus de la moyenne sepalLength")
-//      moyenne = okLines.map(_.sepalLength).mean()
-//      println(okLines.map(_.sepalLength).filter(_ > moyenne).count())
-//
-//
+      println("nombre de replicas: nombre de lignes dupliquées")
+      println(okLines.count - okLines.distinct().count)
+      //ou, sans id
+      okLines.count - okLines.map(_.copy(id = "")).distinct().count
+
+
+      println("nb despece")
+      println(okLines.map(_.species).distinct().count)
+
+      println("nb d'occurence de chaque espece")
+
+
+
+
+
+
+      print(okLines.map(_.species).countByValue())
+
+      println("nb virginica")
+      println(okLines.filter(_.species == "virginica").count)
+
+      println("petalLength moyenne")
+      println(okLines.map(_.petalLength).mean())
+      println("moyenne des petalLength avec reduce")
+      println(okLines.map(_.petalLength).reduce(_ + _) / okLines.count())
+
+      println("nb de lignes au dessus de la moyenne petalLength")
+      var moyenne = okLines.map(_.petalLength).mean()
+      println(okLines.map(_.petalLength).filter(_ > moyenne).count())
+
+      println("nb de lignes au dessus de la moyenne sepalLength")
+      moyenne = okLines.map(_.sepalLength).mean()
+      println(okLines.map(_.sepalLength).filter(_ > moyenne).count())
+
       println("\nKmeans: print de chaque classe")
-      Classification.kmeans(okLines, sc)
+      val x: (RDD[(Vector, Int)], Double) = Classification.kmeans(okLines, sc)
+      x._1.foreach(println)
+
+
+      val multipleKmeans: Seq[(RDD[(Vector, Int)], Double)] = (1 to 10).map(nbClust => Classification.kmeans(okLines, sc, numClust = nbClust))
+
+
+      println("\nLinear regression")
+      val lr: (RDD[(Double, Double)], Double, Double, Vector) = Regression.linearRegression(okLines, sc)
+      println(s"MSE: ${lr._2} \nIntercept: ${lr._3}\nPoids: ");
+      lr._4.toArray.foreach(println)
+
+
     }
 
     exoIris(iris)
@@ -80,7 +103,7 @@ object Main {
       println("Moyenne budget USA " + movies.filter(_.country.contains("USA")).map(_.budget).filter(_.isDefined).map(_.get).mean)
 
       println("\n Nombre de film par pays")
-      println(movies.map(_.country.getOrElse("")).countByValue().filter(_._2>40))
+      println(movies.map(_.country.getOrElse("")).countByValue().filter(_._2 > 40))
 
       println("\nFilms de George Lucas")
       movies.filter(_.directorName == "George Lucas").map(_.movieTitle).foreach(println)
@@ -112,17 +135,17 @@ object Main {
       import org.apache.spark.mllib.stat.Statistics
       val corrRdd: RDD[(Double, Int)] = movies
         .map(m => (m.imdbScore, m.numVotedUsers))
-        .flatMap{
-          case (Some(a), Some(b)) => Some((a,b))
+        .flatMap {
+          case (Some(a), Some(b)) => Some((a, b))
           case _ => None
         }
 
-      val corr = Statistics.corr(corrRdd.map(_._1), corrRdd.map(_._2.toDouble))
+      val corr: Double = Statistics.corr(corrRdd.map(_._1), corrRdd.map(_._2.toDouble))
       println(s"\n correlation imdbscore et numvoteduser: ${corr}")
 
     }
 
-//    exoMovies(movies)
+    //    exoMovies(movies)
 
   }
 

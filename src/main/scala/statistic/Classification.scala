@@ -11,14 +11,28 @@ import org.apache.spark.rdd.RDD
   */
 object Classification {
 
-  def kmeans(iris: RDD[Iris], sc: SparkContext): (RDD[(Vector, Int)], Double) = {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  def kmeans(iris: RDD[Iris], sc: SparkContext, numClust: Int = 3, numIt: Int = 20):
+  (RDD[(Vector, Int)], Double) = {
 
     val parsedData: RDD[Vector] = iris.map(s => Vectors.dense(Array(s.petalWidth, s.sepalWidth, s.petalLength, s.sepalLength))).cache()
 
-    // Cluster the data into two classes using KMeans
-    val numClusters = 3
-    val numIterations = 20
-    val clusters: KMeansModel = KMeans.train(parsedData, numClusters, numIterations)
+    // Cluster the data into numClust classes using KMeans
+    val clusters: KMeansModel = KMeans.train(parsedData, numClust, numIt)
 
     val res: RDD[(Vector, Int)] = parsedData.map(x => (x, clusters.predict(x)))
 

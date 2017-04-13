@@ -10,6 +10,8 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % sparkV,
   "org.apache.spark" %% "spark-sql" % sparkV,
   "org.apache.spark" %% "spark-mllib" % sparkV,
-  "com.databricks" %% "spark-csv" % "1.5.0"
+  "com.databricks" %% "spark-csv" % "1.5.0",
+  "com.quantifind" %% "wisp" % "0.0.4"
+
 )
     
