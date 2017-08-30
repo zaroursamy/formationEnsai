@@ -25,7 +25,7 @@ object Regression {
 
     // modelisation
     val regression: LinearRegressionWithSGD = new LinearRegressionWithSGD().setIntercept(true)
-    regression.optimizer.setStepSize(0.01).setNumIterations(500)
+    regression.optimizer.setStepSize(0.005).setNumIterations(5000)
     val model: LinearRegressionModel = regression.run(iris)
 
     // Evaluate model on training examples and compute training error

@@ -33,6 +33,12 @@ object Main {
 
 
     def exoIris(okLines: RDD[Iris]) = {
+
+      iris
+        .map(_.sepalLength)
+        .filter(_>3)
+        .reduce(_+_)
+
       println("nombre de replicas: nombre de lignes dupliquées")
       println(okLines.count - okLines.distinct().count)
       //ou, sans id
@@ -73,7 +79,6 @@ object Main {
 
 
       val multipleKmeans: Seq[(RDD[(Vector, Int)], Double)] = (1 to 10).map(nbClust => Classification.kmeans(okLines, sc, numClust = nbClust))
-
 
       println("\nLinear regression")
       val lr: (RDD[(Double, Double)], Double, Double, Vector) = Regression.linearRegression(okLines, sc)
